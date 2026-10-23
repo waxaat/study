@@ -13,7 +13,7 @@ int main() {
         count[index]++;
     }
 
-    printf(": ");
+    printf("Буквы, которые встречаются ровно один раз: ");
     int unique_count = 0;
 
     
