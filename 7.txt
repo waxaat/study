@@ -1,3 +1,59 @@
+6 лаба
+.m
+grades = [" 5 ", "неявка", "4", " хор ", "", "100", "2", "два"]
+
+word_to_num = {
+    "отл": 5,
+    "хор": 4,
+    "уд": 3,
+    "неуд": 2
+}
+
+result = []
+
+for grade in grades:
+    grade = grade.strip()
+
+    if grade == "":
+        continue
+
+    if grade in word_to_num:
+        num = word_to_num[grade]
+    elif grade.lstrip("-").isdigit():
+        num = int(grade)
+    else:
+        continue
+
+    if 2 <= num <= 5:
+        result.append(num)
+
+result.sort(reverse=True)
+
+print(result)
+
+.q
+n = int(input())
+commands = input().split()
+
+x = 0
+y = 0
+
+for cmd in commands:
+    if cmd == "U":
+        y += 1
+    elif cmd == "D":
+        y -= 1
+    elif cmd == "L":
+        x -= 1
+    elif cmd == "R":
+        x += 1
+
+distance = abs(x) + abs(y)
+
+print(x, y)
+print(distance)
+
+лаба 7
 .1
 def func(x):
     return x**2 / 10 + 1
@@ -171,7 +227,7 @@ for row in A:
 
 .10
 def tokenize(text):
-    separators = " \t\n.,;:!?()[]{}\"«»…—-"
+    separators = " \t\n.,;:!?()[]{}\"«»…—"
     tokens = []
     buffer = ""
 
@@ -180,8 +236,8 @@ def tokenize(text):
         ch = text[i]
 
         if ch == ".":
-            prev_is_digit = i > 0 and text[i-1].isdigit()
-            next_is_digit = i + 1 < len(text) and text[i+1].isdigit()
+            prev_is_digit = i > 0 and text[i - 1].isdigit()
+            next_is_digit = i + 1 < len(text) and text[i + 1].isdigit()
             if prev_is_digit and next_is_digit:
                 buffer += ch
                 i += 1
@@ -191,10 +247,9 @@ def tokenize(text):
             if buffer:
                 tokens.append(buffer)
                 buffer = ""
-        elif ch in "-'":
-	    buffer += ch
         else:
             buffer += ch
+
         i += 1
 
     if buffer:
@@ -208,3 +263,67 @@ print(tokenize("Жили-были 3.14 раза"))
 print(tokenize('s = "don\'t"'))
 print(tokenize("A...B"))
 print(tokenize(""))
+
+
+
+.11
+def window(lst, window_size):
+    if window_size <= 0 or window_size > len(lst):
+        return []
+    return [tuple(lst[i:i + window_size]) for i in range(len(lst) - window_size + 1)]
+
+
+print(window([1, 2, 3, 4, 5, 6, 7, 8, 9, 0], 3))
+
+.12
+def replace_pair(text, marker, open_tag, close_tag):
+    result = ""
+    while True:
+        start = text.find(marker)
+        if start == -1:
+            break
+        end = text.find(marker, start + len(marker))
+        if end == -1:
+            break
+        result += text[:start] + open_tag
+        result += text[start + len(marker):end] + close_tag
+        text = text[end + len(marker):]
+    return result + text
+
+
+def format_inline(text):
+    text = replace_pair(text, "**", "<b>", "</b>")
+    text = replace_pair(text, "`", "<code>", "</code>")
+    return text
+
+
+def markdown_to_html(md):
+    lines = md.split("\n")
+    result = []
+
+    for line in lines:
+        if line == "":
+            result.append("")
+            continue
+
+        level = 0
+        while level < len(line) and line[level] == "#":
+            level += 1
+
+        if 1 <= level <= 6 and line[level:level + 1] == " ":
+            text = format_inline(line[level + 1:])
+            result.append("<h" + str(level) + ">" + text + "</h" + str(level) + ">")
+        else:
+            result.append("<p>" + format_inline(line) + "</p>")
+
+    return "\n".join(result)
+
+assert markdown_to_html("# Привет") == "<h1>Привет</h1>"
+assert markdown_to_html("### Тема") == "<h3>Тема</h3>"
+assert markdown_to_html("###### Мелкий") == "<h6>Мелкий</h6>"
+assert markdown_to_html("Это **важно**") == "<p>Это <b>важно</b></p>"
+assert markdown_to_html("Код `x`") == "<p>Код <code>x</code></p>"
+assert markdown_to_html("") == ""
+
+md = "# Заголовок\n## Подзаголовок\nЭто **жирный** текст и `код`."
+print(markdown_to_html(md))
