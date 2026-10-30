@@ -327,3 +327,74 @@ assert markdown_to_html("") == ""
 
 md = "# Заголовок\n## Подзаголовок\nЭто **жирный** текст и `код`."
 print(markdown_to_html(md))
+
+
+
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 1. Запись массивов данных
+x = np.arange(1, 15)
+y_day = np.array(
+    [5.1, 6.3, 4.8, 7.2, 9.5, 8.1, 6.7, 5.9, 7.4, 8.8, 10.2, 9.1, 7.5, 6.2]
+)
+y_night = np.array(
+    [-1.2, 0.3, -2.1, 1.5, 3.8, 2.4, 0.9, -0.4, 1.8, 3.2, 4.6, 2.9, 1.1, -0.3]
+)
+
+# 2. Вычисление средних значений и максимальной разницы
+mean_day = np.mean(y_day)
+mean_night = np.mean(y_night)
+
+diff = y_day - y_night
+max_diff_idx = np.argmax(diff)
+max_diff_day = x[max_diff_idx]
+print(f"Средняя температура днём: {mean_day:.2f} °C")
+print(f"Средняя температура ночью: {mean_night:.2f} °C")
+print(
+    f"Максимальная разница между днём и ночью на {max_diff_day}-й день: {diff[max_diff_idx]:.1f} °C"
+)
+
+# Создание фигуры
+plt.figure(figsize=(10, 5))
+
+# 3. Построение основных графиков
+plt.plot(
+    x,
+    y_day,
+    "-",
+    color="tab:orange",
+    marker="o",
+    label=f"днём (ср. = {mean_day:.1f} °C)",
+)
+plt.plot(
+    x,
+    y_night,
+    "--",
+    color="tab:blue",
+    marker="s",
+    label=f"ночью (ср. = {mean_night:.1f} °C)",
+)
+
+# 4. Горизонтальные линии среднего значения
+plt.axhline(mean_day, linestyle=":", color="tab:orange")
+plt.axhline(mean_night, linestyle=":", color="tab:blue")
+
+# 6. Горизонтальная линия y = 0
+plt.axhline(0, color="black", linewidth=0.8)
+
+# 5. Оформление осей и графика
+plt.xlabel("День")
+plt.ylabel("Температура, °C")
+plt.xlim(0.5, 14.5)
+plt.ylim(-5, 12)
+plt.xticks(x)
+plt.grid(linestyle="--", alpha=0.5)
+plt.legend(loc="upper left")
+
+# 8. Сохранение графика в файл
+plt.savefig("weather.png", dpi=150)
+plt.show()
+
