@@ -1,0 +1,244 @@
+.1
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+days = np.arange(1, 15)
+day_temp = [5.1, 6.3, 4.8, 7.2, 9.5, 8.1, 6.7, 5.9, 7.4, 8.8, 10.2, 9.1, 7.5, 6.2]
+night_temp = [-1.2, 0.3, -2.1, 1.5, 3.8, 2.4, 0.9, -0.4, 1.8, 3.2, 4.6, 2.9, 1.1, -0.3]
+
+
+day_mean = np.mean(day_temp)
+night_mean = np.mean(night_temp)
+frost_nights = sum(1 for t in night_temp if t < 0)
+
+plt.figure(figsize=(12, 6))
+
+plt.plot(days, day_temp, color='tab:orange', linestyle='-', marker='o',
+         label='Днём (14:00)', linewidth=2, markersize=6)
+plt.plot(days, night_temp, color='tab:blue', linestyle='--', marker='s',
+         label='Ночью (02:00)', linewidth=2, markersize=6)
+
+
+plt.axhline(day_mean, color='tab:orange', linestyle=':', linewidth=1.5,
+            label=f'Среднее днём = {day_mean:.2f} °C')
+plt.axhline(night_mean, color='tab:blue', linestyle=':', linewidth=1.5,
+            label=f'Среднее ночью = {night_mean:.2f} °C')
+
+
+plt.axhline(0, color='black', linestyle='-', linewidth=1, alpha=0.6,
+            label='y = 0 (граница мороза)')
+
+
+plt.title('Температура воздуха днём и ночью (14 дней)', fontsize=14)
+plt.xlabel('День', fontsize=12)
+plt.ylabel('Температура, °C', fontsize=12)
+plt.xticks(days)
+plt.grid(True, alpha=0.4)
+plt.legend(loc='upper left', fontsize=9)
+plt.tight_layout()
+
+
+plt.savefig('weather.png', dpi=150)
+plt.show()
+
+print(f'Средняя дневная температура: {day_mean:.2f} °C')
+print(f'Средняя ночная температура:  {night_mean:.2f} °C')
+print(f'Ночей с температурой ниже нуля:', frost_nights)
+
+
+.2
+import matplotlib.pyplot as plt
+import numpy as np
+
+days = np.arange(1, 15)
+screen_hours = [4.5, 5.2, 5.8, 4.9, 6.1, 6.8, 7.2, 7.5, 8.1, 7.8, 8.5, 9.0, 9.3, 9.7]
+battery = [58, 52, 48, 55, 42, 38, 33, 29, 22, 25, 18, 14, 11, 8]
+
+
+screen_mean = np.mean(screen_hours)
+battery_mean = np.mean(battery)
+
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5))
+
+
+ax1.plot(days, screen_hours, color='tab:green', linestyle='-', marker='o',
+         linewidth=2, markersize=6, label='Экранное время')
+ax1.axhline(screen_mean, color='tab:red', linestyle='--', linewidth=1.5,
+            label=f'Среднее = {screen_mean:.2f} ч')
+ax1.set_title('Экранное время по дням', fontsize=13)
+ax1.set_xlabel('День', fontsize=11)
+ax1.set_ylabel('Часы, ч', fontsize=11)
+ax1.set_xticks(days)
+ax1.set_ylim(0, 11)
+ax1.grid(True, alpha=0.4)
+ax1.legend(loc='upper left', fontsize=9)
+
+
+ax2.plot(days, battery, color='tab:purple', linestyle='-', marker='s',
+         linewidth=2, markersize=6, label='Заряд батареи')
+ax2.axhline(battery_mean, color='tab:red', linestyle='--', linewidth=1.5,
+            label=f'Среднее = {battery_mean:.2f} %')
+ax2.set_title('Заряд батареи к концу дня', fontsize=13)
+ax2.set_xlabel('День', fontsize=11)
+ax2.set_ylabel('Заряд, %', fontsize=11)
+ax2.set_xticks(days)
+ax2.set_ylim(0, 100)
+ax2.grid(True, alpha=0.4)
+ax2.legend(loc='upper right', fontsize=9)
+
+plt.tight_layout()
+plt.savefig('phone.png', dpi=150)
+plt.show()
+
+.3
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+names = ["Маргарита Мания", "Пепперони-Парад", "Гавайский Хаос",
+         "Четыре Сыра и Слёзы", "Веганский Бунт"]
+sales = [23, 45, 56, 78, 32]
+
+
+x = np.arange(len(names))
+
+
+winner_idx = np.argmax(sales)
+winner_name = names[winner_idx]
+winner_sales = sales[winner_idx]
+print(f"Победитель: {winner_name} — {winner_sales} пицц")
+
+
+fig, ax = plt.subplots(figsize=(10, 5))
+
+
+colors = ['steelblue'] * len(names)
+colors[winner_idx] = 'crimson'
+edges = ['navy'] * len(names)
+edges[winner_idx] = 'darkred'
+linewidths = [1.2] * len(names)
+linewidths[winner_idx] = 2.5
+
+bars = ax.bar(x, sales, width=0.6, color=colors, edgecolor=edges, linewidth=linewidths, zorder=3)
+
+for i, (bar, value) in enumerate(zip(bars, sales)):
+    ax.text(bar.get_x() + bar.get_width() / 2, value + 1.5, str(value), ha='center', va='bottom', fontsize=11, fontweight='bold' if i == winner_idx else 'normal', color='crimson' if i == winner_idx else 'black')
+
+
+ax.set_title("Битва пиццерий: продажи за неделю", fontsize=16, fontweight='bold', pad=15)
+ax.set_xlabel("Пиццерия", fontsize=12)
+ax.set_ylabel("Продано пицц, шт.", fontsize=12)
+
+ax.set_xticks(x)
+ax.set_xticklabels(names, rotation=15, ha='right', fontsize=10)
+
+
+ax.grid(axis='y', linestyle='--', alpha=0.6, zorder=0)
+ax.set_axisbelow(True)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.set_ylim(0, max(sales) * 1.15)
+
+
+ax.annotate('Победитель!', xy=(winner_idx, winner_sales),
+            xytext=(winner_idx, winner_sales + 14),
+            ha='center', fontsize=11, color='crimson',
+            fontweight='bold',
+            arrowprops=dict(arrowstyle='->', color='crimson', lw=1.5))
+
+plt.tight_layout()
+plt.savefig('pizzeria.png', dpi=150)
+
+plt.show()
+
+.4
+import matplotlib.pyplot as plt
+
+
+labels = ["Спасает мир", "Сон (восстановление сил)",
+          "Кибер-квесты", "Другое"]
+hours = [8, 7, 5, 4]
+
+
+fig, ax = plt.subplots(figsize=(7, 7))
+
+
+colors = ['crimson', 'royalblue', 'seagreen', 'goldenrod']
+explode = [0.05, 0, 0, 0]
+
+wedges, texts, autotexts = ax.pie(
+    hours,
+    labels=labels,
+    autopct='%1.1f%%',
+    colors=colors,
+    explode=explode,
+    startangle=90,
+    counterclock=False,
+    wedgeprops=dict(edgecolor='white', linewidth=1.5),
+    textprops=dict(fontsize=11)
+)
+
+
+for autotext in autotexts:
+    autotext.set_color('white')
+    autotext.set_fontweight('bold')
+    autotext.set_fontsize(12)
+
+
+ax.set_title("День супергероя Алексея",
+             fontsize=16, fontweight='bold', pad=20)
+
+ax.axis('equal')
+
+plt.tight_layout()
+
+
+plt.savefig('superhero.png', dpi=150)
+
+plt.show()
+
+
+.5
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+dist = np.array([100, 500, 1000, 3000, 5000, 10000])   # км
+ping = np.array([1.8, 5.9, 11.5, 32.5, 53.0, 104.2])   # мс
+
+
+c = 300000.0
+n = 1.5
+v = c / n
+
+d_line = np.linspace(0, dist.max(), 200)
+ping_theory = (2 * d_line / v) * 1000
+
+
+fig, ax = plt.subplots(figsize=(10, 6))
+
+
+ax.plot(dist, ping, linestyle='None', marker='o', markersize=9,
+        markerfacecolor='crimson', markeredgecolor='darkred',
+        label='Измеренный пинг')
+
+
+ax.plot(d_line, ping_theory, linestyle='-', color='navy', linewidth=2,
+        label=f'Теория: v = c/n = {v:.0f} км/с')
+
+
+ax.set_title("Оптоволокно: измеренный и теоретический пинг",
+             fontsize=15, fontweight='bold')
+ax.set_xlabel("Расстояние, км", fontsize=12)
+ax.set_ylabel("Пинг (RTT), мс", fontsize=12)
+
+ax.set_xlim(0, dist.max() * 1.05)
+ax.set_ylim(0, ping.max() * 1.05)
+ax.grid(True, linestyle='--', alpha=0.6)
+ax.legend(fontsize=11)
+plt.tight_layout()
+plt.savefig('ping_test.png', dpi=150)
+
+plt.show()
