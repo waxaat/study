@@ -1,6 +1,3 @@
-git add sort.c
-git commit -m "Add second comment to sort.c"
-
 cat << 'EOF' >> README.md
 
 ### Пункты 9–17. Редактирование файла и работа со stage
@@ -8,10 +5,6 @@ cat << 'EOF' >> README.md
 - После второго комментария (без `git add`) команда `git commit` зафиксировала только первое изменение, а второе осталось неиндексированным.
 - Затем второе изменение было добавлено в индекс, закоммичено и отправлено на GitHub (`git push`).
 
-![Частичный коммит и журнал](screenshots/03_partial_commit.png)
+![Частичный коммит и журнал (часть 1)](screenshots/03_partial_commit_1.png)
+![Частичный коммит и журнал (часть 2)](screenshots/03_partial_commit_2.png)
 EOF
-
-git add README.md screenshots/
-git commit -m "Update README.md with Grade 3 part 1 report"
-git push
-
