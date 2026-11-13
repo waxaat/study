@@ -1,9 +1,17 @@
+git add sort.c
+git commit -m "Add second comment to sort.c"
+
 cat << 'EOF' >> README.md
 
-### Пункты 3–8. Создание и коммит sort.c
-- После создания `sort.c` команда `git status` отобразила его как неотслеживаемый (`Untracked files`).
-- После `git add sort.c` файл перешел в индекс (`Changes to be committed`).
-- После `git commit` файл `sort.c` зафиксирован в локальном репозитории.
+### Пункты 9–17. Редактирование файла и работа со stage
+- После первого комментария и `git add` изменение попало в индекс.
+- После второго комментария (без `git add`) команда `git commit` зафиксировала только первое изменение, а второе осталось неиндексированным.
+- Затем второе изменение было добавлено в индекс, закоммичено и отправлено на GitHub (`git push`).
 
-![Добавление и коммит sort.c](screenshots/02_sort_commit.png)
+![Частичный коммит и журнал](screenshots/03_partial_commit.png)
 EOF
+
+git add README.md screenshots/
+git commit -m "Update README.md with Grade 3 part 1 report"
+git push
+
