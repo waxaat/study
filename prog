@@ -1,11 +1,9 @@
-void bubble_sort(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-}
+cat << 'EOF' >> README.md
+
+### Пункты 3–8. Создание и коммит sort.c
+- После создания `sort.c` команда `git status` отобразила его как неотслеживаемый (`Untracked files`).
+- После `git add sort.c` файл перешел в индекс (`Changes to be committed`).
+- После `git commit` файл `sort.c` зафиксирован в локальном репозитории.
+
+![Добавление и коммит sort.c](screenshots/02_sort_commit.png)
+EOF
