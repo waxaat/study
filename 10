@@ -9,3 +9,19 @@ with open("server_log.txt", "r", encoding="utf-8") as f:
 print(f"Найдено {c} критических ошибок")
 
 #.2
+stat= {
+    "INFO": 0,
+    "WARNING": 0,
+    "ERROR": 0,
+    "CRITICAL": 0
+}
+with open("server_log.txt", "r", encoding="utf-8") as f:
+    for l in f:
+        chast = l.strip().split(maxsplit=3)
+        if len(chast)>=3:
+            lev = chast[2]
+            if lev in stat:
+                stat[lev]+=1
+for lev, cnt in stat.items():
+    print(f"{lev}: {cnt}")
+
