@@ -1,0 +1,11 @@
+#.1
+c=0
+with open("server_log.txt", "r", encoding="utf-8") as f:
+    with open("errors_only.txt", "w", encoding="utf-8") as err_f:
+        for l in f:
+            if "ERROR" in l or "CRITICAL" in l:
+                err_f.write(l)
+                c+=1
+print(f"Найдено {c} критических ошибок")
+
+#.2
