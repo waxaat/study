@@ -25,3 +25,160 @@ with open("server_log.txt", "r", encoding="utf-8") as f:
 for lev, cnt in stat.items():
     print(f"{lev}: {cnt}")
 
+#.3
+participants = []
+
+with open("olimp.txt", "r", encoding="utf-8") as f:
+    for line in f:
+        line = line.strip()
+        if line:
+            info, score_str = line.rsplit(maxsplit=1)
+            participants.append((info, int(score_str)))
+
+max_score = max(p for p in participants)
+prize_score = max(p for p in participants if p < max_score)
+
+for info, score in participants:
+    if score == prize_score:
+        print(info, score)
+        break
+
+#.4
+with open("secret.txt", "r", encoding="utf-8") as f:
+    lines = f.readlines()
+
+result = []
+
+for line in lines:
+    line = line.strip()
+    if not line:
+        continue
+    
+    name_part, phone_part, email_part = line.split(", ")
+    
+    phone_prefix, phone = phone_part.split(": ")
+    masked_phone = "*" * (len(phone) - 2) + phone[-2:]
+    
+    email_prefix, email = email_part.split(": ")
+    login, domain = email.split("@")
+    masked_email = login[0] + "***@" + domain
+    
+    new_line = f"{name_part}, {phone_prefix}: {masked_phone}, {email_prefix}: {masked_email}\n"
+    result.append(new_line)
+
+with open("secret_anonymized.txt", "w", encoding="utf-8") as f:
+    f.writelines(result)
+
+#.5
+import string
+
+with open("article.txt", "r", encoding="utf-8") as f:
+    text = f.read().lower()
+
+for char in string.punctuation + "«»—–":
+    text = text.replace(char, " ")
+
+words = text.split()
+word_counts = {}
+
+for word in words:
+    word_counts[word] = word_counts.get(word, 0) + 1
+
+top_words = sorted(word_counts.items(), key=lambda x: x, reverse=True)[:5]
+
+for word, count in top_words:
+    print(word, count)
+
+#.6
+def text_to_t9(text):
+    keypad = {
+        '2': 'ABC',
+        '3': 'DEF',
+        '4': 'GHI',
+        '5': 'JKL',
+        '6': 'MNO',
+        '7': 'PQRS',
+        '8': 'TUV',
+        '9': 'WXYZ',
+        '0': ' '
+    }
+    
+    char_map = {}
+    for digit, letters in keypad.items():
+        for index, letter in enumerate(letters, start=1):
+            char_map[letter] = digit * index
+            
+    result = []
+    for char in text.upper():
+        if char in char_map:
+            result.append(char_map[char])
+            
+    return "".join(result)
+
+user_input = input()
+print(text_to_t9(user_input))
+
+#.7
+import json
+
+with open("servers.json", "r", encoding="utf-8") as f:
+    servers = json.load(f)
+
+stats = {"online": 0, "offline": 0, "maintenance": 0}
+offline_servers = []
+
+for name, status in servers.items():
+    if status in stats:
+        stats[status] += 1
+    if status == "offline":
+        offline_servers.append(name)
+
+print("online:", stats["online"])
+print("offline:", stats["offline"])
+print("maintenance:", stats["maintenance"])
+print("Упавшие серверы:", ", ".join(offline_servers))
+
+#.8
+import json
+
+with open("playlist.json", "r", encoding="utf-8") as f:
+    playlist = json.load(f)
+
+print("Доступные жанры:", ", ".join(playlist.keys()))
+
+chosen_genre = input("Какой жанр вы хотите послушать? ")
+if chosen_genre in playlist:
+    for song in playlist[chosen_genre]:
+        print(song)
+else:
+    print("Такого жанра нет в плейлисте.")
+
+new_song = input("Введите название нового трека: ")
+new_genre = input("Введите жанр для нового трека: ")
+
+if new_genre in playlist:
+    playlist[new_genre].append(new_song)
+else:
+    playlist[new_genre] = [new_song]
+
+with open("playlist.json", "w", encoding="utf-8") as f:
+    json.dump(playlist, f, ensure_ascii=False, indent=4)
+
+#.9
+import json
+
+with open("movies.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+print(data["database_name"])
+
+movies = data["movies"]
+print(len(movies))
+
+first_movie = movies[0]
+print(first_movie["title"], first_movie["year"])
+
+sorted_movies = sorted(movies, key=lambda x: x["rating"], reverse=True)
+
+for index, movie in enumerate(sorted_movies[:5], start=1):
+    print(f"{index}. {movie['title']} ({movie['year']}) — Рейтинг: {movie['rating']}")
